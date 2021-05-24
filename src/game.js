@@ -3,7 +3,41 @@ export default class Game {
         this.world = world;
         this.view = view;
         this.levels = levels;
+        this.isMoving = false;
+
+
         this.loop = this.loop.bind(this);
+    }
+
+    async init() {
+        this.view.init();
+
+        document.addEventListener('keydown', ({code}) => {
+            switch (code) {
+                case 'ArrowUp':
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case 'ArrowLeft':
+                    this.isMoving = true;
+                    break;
+                case 'Space':
+                case 'Enter':
+            }
+            this.key = code;
+        })
+
+        document.addEventListener('keyup', ({code}) => {
+            switch (code) {
+                case 'ArrowUp':
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case 'ArrowLeft':
+                    this.isMoving = false;
+                case 'Space':
+                case 'Enter':
+            }
+            this.key = '';
+        })
     }
 
     start() {
@@ -11,12 +45,10 @@ export default class Game {
     }
 
     loop() {
-        console.log('LOOP')
+        //console.log('LOOP')
         //get input
-        //update world
-        this.world.update();
-        //update view
-        this.view.update();
+        this.world.update(this.key, this.isMoving);
+        this.view.update(this.world);
 
         requestAnimationFrame(this.loop);
     }
